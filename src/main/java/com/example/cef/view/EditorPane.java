@@ -12,22 +12,20 @@ import org.fxmisc.richtext.CodeArea;
 
 public class EditorPane extends TabPane {
     public EditorPane(CodeEditorViewModel viewModel) {
-        Tab tab = new CodeTab();
-//        codeArea.setStyle("-fx-font-family: monospace;");
-//        textFlow = new TextFlow();
-//        codeArea.setGraphic(textFlow);
-
-        // Bind the code area text to the document text
-//        codeArea.textProperty().bindBidirectional(viewModel.documentTextProperty());
-
-        // Apply syntax highlighting on text changes
-//        codeArea.textProperty().addListener((observable, oldValue, newValue) -> {
-//            viewModel.getHighlightingManager().highlightSyntax(textFlow, newValue);
-//        });
-        this.getTabs().add(tab);
+        newTab();
     }
 
-//    public CodeArea getCodeArea() {
-//        return codeArea;
-//    }
+    public void newTab(){
+        Tab tab = new CodeTab("Untitled", "");
+        this.getTabs().add(tab);
+        this.getSelectionModel().select(tab);
+    }
+
+    public CodeArea getCurrentCodeArea() {
+        Tab selectedTab = getSelectionModel().getSelectedItem();
+        if (selectedTab instanceof CodeTab) {
+            return ((CodeTab) selectedTab).getCodeArea();
+        }
+        return null;
+    }
 }

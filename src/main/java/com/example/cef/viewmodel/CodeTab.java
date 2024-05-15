@@ -1,28 +1,49 @@
 package com.example.cef.viewmodel;
 
+import com.example.cef.view.EditorPane;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextFlow;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import java.util.function.IntFunction;
 
 public class CodeTab extends Tab {
 
     private CodeArea codeArea;
-    private TextFlow textFlow;
-    public CodeTab() {
-        codeArea = new CodeArea();
-//        codeArea.setStyle("-fx-font-family: monospace;");
-//        textFlow = new TextFlow();
-//        codeArea.setGraphic(textFlow);
+    public CodeTab(String s, String codeAreaContent) {
+        if (codeAreaContent != null) {
+            this.codeArea = new CodeArea(codeAreaContent);
+        } else {
+            this.codeArea = new CodeArea();
+        }
 
-        // Bind the code area text to the document text
-//        codeArea.textProperty().bindBidirectional(viewModel.documentTextProperty());
+        VirtualizedScrollPane<CodeArea> vsPane = new VirtualizedScrollPane<>(codeArea);
+        StackPane stackPane = new StackPane(vsPane);
+        this.setContent(stackPane);
+        this.setText(s);
 
-        // Apply syntax highlighting on text changes
-//        codeArea.textProperty().addListener((observable, oldValue, newValue) -> {
-//            viewModel.getHighlightingManager().highlightSyntax(textFlow, newValue);
-//        });
+        codeArea.setWrapText(true);
 
-        this.setContent(codeArea);
+        // Создание нумерации строк
+        IntFunction<Node> lineNumberFactory = LineNumberFactory.get(codeArea);
+
+        codeArea.setParagraphGraphicFactory(line -> {
+            Node lineNumber = lineNumberFactory.apply(line);
+            lineNumber.getStyleClass().add("line-number");
+            return lineNumber;
+        });
+    }
+
+    public CodeArea getCodeArea() {
+        return codeArea;
+    }
+
+    public void setCodeArea(CodeArea codeArea) {
+        this.codeArea = codeArea;
     }
 }
