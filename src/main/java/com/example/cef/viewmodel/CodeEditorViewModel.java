@@ -32,10 +32,10 @@ public class CodeEditorViewModel {
         return documentText;
     }
 
-    public void setDocumentLanguage(Language language) {
-        document.setLanguage(language);
-        highlightingManager.setLanguage(language);
-    }
+//    public void setDocumentLanguage(Language language) {
+//        document.setLanguage(language);
+//        highlightingManager.setLanguage(language);
+//    }
 
     public HighLightingManager getHighlightingManager() {
         return highlightingManager;
